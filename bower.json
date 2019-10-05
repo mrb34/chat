@@ -1,0 +1,14 @@
+{
+  "name": "chatapp",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Yusuf ŞENEL <ysf.senel@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "chat",
+    "nodejs"
+  ],
+  "homepage": "https://github.com/mrb34/chat"
+}
