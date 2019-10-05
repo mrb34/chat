@@ -10,5 +10,8 @@
     "chat",
     "nodejs"
   ],
-  "homepage": "https://github.com/mrb34/chat"
+  "homepage": "https://github.com/mrb34/chat",
+  "dependencies": {
+    "angular": "^1.7.8"
+  }
 }
