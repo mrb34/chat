@@ -13,12 +13,12 @@ passport.use(
         ((accessToken, refreshToken, profile, done) => {
 
             const data = profile._json;
-           // console.log(data);
+           //console.log(data);
             User.findOrCreate({
                 'googleId':data.id
             },{
-                name:data.name.givenName,
-                surname:data.name.familyName,
+                name:data.given_name,
+                surname:data.family_name,
                 profilePhotoUrl: data.picture
             },(err,user)=>{
                 return done(err,user)
