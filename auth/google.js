@@ -13,9 +13,9 @@ passport.use(
         ((accessToken, refreshToken, profile, done) => {
 
             const data = profile._json;
-           //console.log(data);
+           // console.log(data); google dan dönen data
             User.findOrCreate({
-                'googleId':data.id
+                'googleId':data.sub
             },{
                 name:data.given_name,
                 surname:data.family_name,
