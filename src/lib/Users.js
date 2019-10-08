@@ -45,4 +45,4 @@ Users.prototype.list = function (callback) {
         return callback(active);
     })
 
-}
+};
