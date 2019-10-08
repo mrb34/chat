@@ -7,6 +7,7 @@ const socketApi = {
 /*
 * libs*/
 const Users = require('../src/lib/Users');
+const Rooms = require('../src/lib/Rooms');
 io.use(socketAuthorization);
 /*
 *redis adapter
@@ -24,11 +25,22 @@ io.on('connection', socket => {
         io.emit('onlineList',users);
 
     });
+
+    socket.on('newRoom',roomName=>{
+        Rooms.upsert(roomName);
+    });
+
+
+
     socket.on('disconnect', () => {
         Users.remove(socket.request.user.googleId)
         Users.list(users => {
             io.emit('onlineList',users);
         });
-    })
+    });
+
+
+
+
 });
 module.exports = socketApi;
