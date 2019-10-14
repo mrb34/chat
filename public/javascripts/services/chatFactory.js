@@ -1,7 +1,7 @@
 app.factory('chatFactory',['$http','env',($http,env)=>{
     const getMessages=roomId=>{
         return $http({
-        url:env.SERVİCES_URL+'messages/list',
+        url:env.SERVİCES_URL+'/messages/list',
             method:'GET',
             params:{
             roomId

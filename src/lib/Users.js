@@ -7,7 +7,7 @@ module.exports = new Users();
 Users.prototype.upsert = function (connectionID, meta) {
     this.client.hset(
         'online',
-        meta.googleId,
+        meta._id,
         JSON.stringify({
             connectionID,
             meta,
@@ -21,10 +21,10 @@ Users.prototype.upsert = function (connectionID, meta) {
         }
     )
 };
-Users.prototype.remove = function (googleId) {
+Users.prototype.remove = function (_id) {
     this.client.hdel(
         'online',
-        googleId,
+        _id,
         err => {
             if (err) {
                 console.error(err);
