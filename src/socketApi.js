@@ -32,7 +32,7 @@ io.on('connection', socket => {
     });
 
     socket.on('newMessage',data=>{
-        ///console.log(data);
+       //console.log(data);
         Messages.upsert({
             ...data,
             username:socket.request.user.name,
