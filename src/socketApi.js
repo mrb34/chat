@@ -21,7 +21,7 @@ io.adapter(redisAdapter(
     }));
 
 io.on('connection', socket => {
-    console.log('a user logged in with name' + socket.request.user.surname);
+   // console.log('a user logged in with name' + socket.request.user.surname);
     Users.upsert(socket.id, socket.request.user);
     Users.list(users => {
         io.emit('onlineList',users);
@@ -33,14 +33,15 @@ io.on('connection', socket => {
 
     socket.on('newMessage',data=>{
        //console.log(data);
-        Messages.upsert({
+
+        const messageData={
             ...data,
             userId:socket.request.user._id,
             username:socket.request.user.name,
             surname:socket.request.user.surname,
-
-
-        });
+        }
+        Messages.upsert(messageData);
+        socket.broadcast.emit('receiveMessage',messageData)
     });
     socket.on('newRoom',roomName=>{
         Rooms.upsert(roomName);

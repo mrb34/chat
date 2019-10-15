@@ -1,13 +1,13 @@
-app.controller('chatController', ['$scope','userFactory','chatFactory', ($scope,userFactory,chatFactory) => {
-   /*
-   initialization
-    */
-function init(){
-    userFactory.getUser().then(user=>{
-        $scope.user=user;
-    })
-};
-init();
+app.controller('chatController', ['$scope', 'userFactory', 'chatFactory', ($scope, userFactory, chatFactory) => {
+    /*
+    initialization
+     */
+    function init() {
+        userFactory.getUser().then(user => {
+            $scope.user = user;
+        })
+    };
+    init();
     /*
     * Angular variables
     * */
@@ -15,12 +15,12 @@ init();
     $scope.roomList = [];
     $scope.activeTab = 1;
     $scope.chatClicked = false;
-    $scope.loadingMessages=false;
-    $scope.chatName="";
-    $scope.roomId="";
-    $scope.message="";
-    $scope.messages=[];
-    $scope.user={};
+    $scope.loadingMessages = false;
+    $scope.chatName = "";
+    $scope.roomId = "";
+    $scope.message = "";
+    $scope.messages = [];
+    $scope.user = {};
     /*
     * socket.io event handling
     * */
@@ -35,30 +35,52 @@ init();
         $scope.$apply();
     });
 
+    socket.on('receiveMessage', data => {
 
-    $scope.newMessage=()=>{
-       //console.log($scope.message);
-      // console.log($scope.roomId);
-        socket.emit('newMessage',{
-           message: $scope.message,
-            roomId:$scope.roomId
+        $scope.messages[data.roomId].push({
+            userId: data.user_id,
+            username: data.username,
+            surname: data.surname,
+            message: data.message,
+
         });
-        $scope.message='';
-        console.log($scope.user);
+        $scope.$apply();
+    });
+    $scope.newMessage = () => {
+        if ($scope.message.trim() !== '') {
+            socket.emit('newMessage', {
+                message: $scope.message,
+                roomId: $scope.roomId
+            });
+            $scope.messages[$scope.roomId].push({
+                userId: $scope.user._id,
+                username: $scope.user.name,
+                surname: $scope.user.surname,
+                message: $scope.message,
+
+            });
+
+            $scope.message = '';
+            // console.log($scope.user);
+        }
+
 
     };
 
-    $scope.switchRoom=room=>{
-        $scope.chatName=room.name;
-        $scope.roomId=room.id;
+    $scope.switchRoom = room => {
+        $scope.chatName = room.name;
+        $scope.roomId = room.id;
         $scope.chatClicked = true;
-        $scope.loadingMessages=true;
-        chatFactory.getMessages(room.id).then(data=>{
-            //console.log(data);
-            $scope.messages[room.id]=data;
-            //console.log($scope.messages);
-            $scope.loadingMessages=false;
-        });
+        if (!$scope.messages.hasOwnProperty(room.id)) {
+            $scope.loadingMessages = true;
+            console.log('servise bağlanıyor');
+            chatFactory.getMessages(room.id).then(data => {
+                $scope.messages[room.id] = data;
+                //console.log($scope.messages);
+                $scope.loadingMessages = false;
+            });
+        }
+
 
     };
 
@@ -66,10 +88,10 @@ init();
         // let randomName = Math.random().toString(36).substring(7);
 
         let roomName = window.prompt("enter room name");
-        if (roomName!==""&&roomName!==null){
+        if (roomName !== "" && roomName !== null) {
             socket.emit('newRoom', roomName);
-        };
-
+        }
+        ;
 
 
     };
